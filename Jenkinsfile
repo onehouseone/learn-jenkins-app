@@ -61,29 +61,31 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
-            steps {
-                sh '''
-                    echo "=== Deploy Stage ==="
-                    npm install netlify-cli
-                    node_modules/.bin/netlify --version
-                    echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
-                    node_modules/.bin/netlify deploy \
-                                                --dir=build \
-                                                --site="$NETLIFY_SITE_ID" \
-                                                --auth="$NETLIFY_AUTH_TOKEN" \
-                                                --prod \
-                                                -b
-                    echo "=== Deployment complete! ==="
-                '''
-            }
+      stage('Deploy') {
+    agent {
+        docker {
+            image 'node:18-alpine'
+            reuseNode true
         }
+    }
+    steps {
+        sh '''
+            echo "=== Deploy Stage ==="
+            npm install netlify-cli
+            node_modules/.bin/netlify --version
+            echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
+            
+            node_modules/.bin/netlify deploy \
+                --dir=build \
+                --site="$NETLIFY_SITE_ID" \
+                --auth="$NETLIFY_AUTH_TOKEN" \
+                --prod \
+                --skip-cache
+            
+            echo "=== Deployment complete! ==="
+        '''
+    }
+}
     }
     
     post {
