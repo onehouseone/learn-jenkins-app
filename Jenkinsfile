@@ -68,15 +68,13 @@ pipeline {
                     reuseNode true
                 }
             }
-            when {
-                branch 'main'  // Only deploy from main branch
-            }
             steps {
                 sh '''
                     echo "=== Deploy Stage ==="
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify deploy --dir=build --prod 
                     echo "=== Deployment complete! ==="
                 '''
             }
