@@ -41,7 +41,7 @@ pipeline {
                     junit testResults: 'test-result/junit.xml', allowEmptyResults: true
                 }
             }
-    }
+    
         }
 
         stage('Deploy') {
